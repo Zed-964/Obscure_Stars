@@ -1,0 +1,44 @@
+{
+  "sea_level": -64,
+  "disable_mob_generation": false,
+  "aquifers_enabled": false,
+  "ore_veins_enabled": true,
+  "legacy_random_source": false,
+  "default_block": {
+    "Name": "minecraft:stone"
+  },
+  "default_fluid": {
+    "Name": "minecraft:air"
+  },
+  "noise": {
+    "min_y": -64,
+    "height": 384,
+    "size_horizontal": 4,
+    "size_vertical": 3
+  },
+  "noise_router": {
+    "barrier": 0,
+    "fluid_level_floodedness": 0,
+    "fluid_level_spread": 0,
+    "lava": 0,
+    "temperature": {
+      "type": "minecraft:shifted_noise",
+      "noise": "minecraft:temperature",
+      "xz_scale": 0,
+      "y_scale": 0
+    },
+    "vegetation": 0,
+    "continents": 0
+  },
+  "spawn_target": [
+    {
+      "temperature": 0,
+      "humidity": 0,
+      "continentalness": 0,
+      "erosion": 0,
+      "weirdness": 0,
+      "depth": 0,
+      "offset": 0
+    }
+  ]
+}
