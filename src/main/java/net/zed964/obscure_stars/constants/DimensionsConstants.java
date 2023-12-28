@@ -1,10 +1,10 @@
 package net.zed964.obscure_stars.constants;
 
-public class DimensionConstants {
+public class DimensionsConstants {
 
     public static final String ASTEROID_FIELD_PATH = "asteroid_field";
 
-    private DimensionConstants() {
+    private DimensionsConstants() {
 
     }
 }
