@@ -43,6 +43,8 @@ public class ObscureStars {
         MinecraftForge.EVENT_BUS.register(this);
 
         GeckoLib.initialize();
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ObscureStarsFileConfig.SPEC, ObscureStarsFileConfig.FILE_NAME_CONFIG);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
