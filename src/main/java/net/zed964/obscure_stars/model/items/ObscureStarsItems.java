@@ -11,8 +11,14 @@ import net.zed964.obscure_stars.ObscureStars;
 import net.zed964.obscure_stars.model.armors.ObscureStarsArmors;
 import net.zed964.obscure_stars.model.items.custom.armor.SpacesuitItem;
 
+/**
+ * Class qui registre tous les items du jeu
+ */
 public class ObscureStarsItems {
 
+    /**
+     * Constructeur par défaut
+     */
     private ObscureStarsItems() {
 
     }
@@ -33,6 +39,10 @@ public class ObscureStarsItems {
             () -> new SpacesuitItem(ObscureStarsArmors.SPACESUIT, EquipmentSlot.FEET, new Item.Properties()));
 
 
+    /**
+     * Function qui repertory tous les items du mod
+     * @param eventBus Event pour construire des instances
+     */
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

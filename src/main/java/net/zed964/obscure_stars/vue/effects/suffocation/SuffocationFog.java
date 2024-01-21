@@ -5,6 +5,9 @@ import net.minecraftforge.client.event.ViewportEvent;
 import net.zed964.obscure_stars.constants.EffectsConstants;
 import net.zed964.obscure_stars.utils.MethodUtils;
 
+/**
+ * Class qui gère l'animation du brouillard pour l'effet suffocation
+ */
 public class SuffocationFog {
 
     private boolean isProcessingFog;
@@ -19,6 +22,9 @@ public class SuffocationFog {
 
     private float currentFarPlaneDistance;
 
+    /**
+     * Constructeur par défaut
+     */
     public SuffocationFog() {
         isProcessingFog = false;
         isAppliedFog = false;
@@ -26,12 +32,20 @@ public class SuffocationFog {
         isAnimatingFarFog = false;
     }
 
+    /**
+     * Stock les valeurs de la distance actuelle du brouillard
+     * @param event Event lors du rendu du brouillard
+     */
     public void setCurrentValueWhenStartingFog(ViewportEvent.RenderFog event) {
         currentNearPlaneDistance = event.getRenderer().getRenderDistance() / 1.15F;
         currentFarPlaneDistance = event.getRenderer().getRenderDistance() * 1.225F;
         isProcessingFog = true;
     }
 
+    /**
+     * Applique la distance proche du brouillard lors de l'animation
+     * @param event Event lors du rendu du brouillard
+     */
     public void animatingNearFog(ViewportEvent.RenderFog event) {
         if (currentNearPlaneDistance > EffectsConstants.SUFFOCATION_FOG_START) {
             isAnimatingNearFog = true;
@@ -50,6 +64,10 @@ public class SuffocationFog {
         event.setNearPlaneDistance(currentNearPlaneDistance);
     }
 
+    /**
+     * Applique la distance lointaine du brouillard lors de l'animation
+     * @param event Event lors du rendu du brouillard
+     */
     public void animatingFarFog(ViewportEvent.RenderFog event) {
         if (currentFarPlaneDistance > EffectsConstants.SUFFOCATION_FOG_END) {
             isAnimatingFarFog = true;
@@ -68,11 +86,18 @@ public class SuffocationFog {
         event.setFarPlaneDistance(currentFarPlaneDistance);
     }
 
+    /**
+     * Applique la distance finale du brouillard lorsque l'animation est terminé
+     * @param event Event lors du rendu du brouillard
+     */
     public void fogFinalApplied(ViewportEvent.RenderFog event) {
         event.setNearPlaneDistance(EffectsConstants.SUFFOCATION_FOG_START);
         event.setFarPlaneDistance(EffectsConstants.SUFFOCATION_FOG_END);
     }
 
+    /**
+     * Change les valeurs d'état lorsque l'animation est terminé
+     */
     public void animatingFinish() {
         if (!isAnimatingNearFog && !isAnimatingFarFog) {
             isProcessingFog = false;
@@ -80,6 +105,12 @@ public class SuffocationFog {
         }
     }
 
+    /**
+     * Change la vitesse de l'animation selon la distance du brouillard
+     * @param target La distance que l'in vise
+     * @param current La distance actuelle où l'on se trouve
+     * @return La valeur de diminution de la distance
+     */
     private float animationSlowByDistance(float target, float current) {
         if (current > target + 300) {
             return 0.15F;
@@ -100,6 +131,9 @@ public class SuffocationFog {
         }
     }
 
+    /**
+     * Change toutes les valeurs d'état sur False
+     */
     public void setAllToFalse() {
         isProcessingFog = false;
         isAppliedFog = false;
@@ -107,10 +141,18 @@ public class SuffocationFog {
         isAnimatingFarFog = false;
     }
 
+    /**
+     * Getter sur l'état de début de l'animation
+     * @return True si l'animation est en cours d'exécution sinon False
+     */
     public boolean getIsProcessingFog() {
         return isProcessingFog;
     }
 
+    /**
+     * Getter sur l'état de fin de l'animation
+     * @return True si l'animation est terminé
+     */
     public boolean getIsAppliedFog() {
         return isAppliedFog;
     }

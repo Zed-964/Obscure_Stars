@@ -20,14 +20,27 @@ import software.bernie.geckolib.core.object.PlayState;
 
 import java.util.function.Consumer;
 
+/**
+ * Class des items pour l'armure Spacesuit
+ */
 public class SpacesuitItem extends ArmorItem implements GeoItem {
 
     private final AnimatableInstanceCache animatableInstanceCache = new SingletonAnimatableInstanceCache(this);
 
+    /**
+     * Constructeur par défaut de la classe
+     * @param pMaterial Matériel de l'armure
+     * @param pSlot Slot de l'inventaire d'un joueur
+     * @param pProperties Propriété de l'item
+     */
     public SpacesuitItem(ArmorMaterial pMaterial, EquipmentSlot pSlot, Properties pProperties) {
         super(pMaterial, pSlot, pProperties);
     }
 
+    /**
+     * Initialization du client pour le rendu de l'armure pour chaque item équipé sur un joueur
+     * @param consumer Opération
+     */
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
@@ -47,16 +60,29 @@ public class SpacesuitItem extends ArmorItem implements GeoItem {
         });
     }
 
+    /**
+     * Méthode qui vérifie l'animation de l'armure
+     * @param animationState Animation
+     * @return Le status de l'animation
+     */
     private PlayState predicate(AnimationState animationState) {
         animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
         return PlayState.CONTINUE;
     }
 
+    /**
+     * Register le controller pour l'animation de l'armure
+     * @param controllerRegistrar Controller
+     */
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
         controllerRegistrar.add(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
+    /**
+     * Singleton pour l'animation du cache
+     * @return Animation instance
+     */
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return animatableInstanceCache;
