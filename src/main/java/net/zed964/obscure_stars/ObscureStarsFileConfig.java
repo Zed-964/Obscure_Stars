@@ -1,6 +1,7 @@
 package net.zed964.obscure_stars;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+
 import net.zed964.obscure_stars.constants.DimensionsConstants;
 
 public class ObscureStarsFileConfig {
@@ -14,6 +15,8 @@ public class ObscureStarsFileConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOWED_SPAWN_CUSTOM;
 
     public static final ForgeConfigSpec.ConfigValue<String> DIMENSION_NAME_OF_THE_SPAWN;
+
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOWED_SPAWN_WITH_STRUCTURE_CUSTOM;
 
     private ObscureStarsFileConfig() {
 
@@ -31,13 +34,19 @@ public class ObscureStarsFileConfig {
 
         ALLOWED_SPAWN_CUSTOM = BUILDER.comment("""
                         Allowed the spawn custom of the mod.
-                          - True, your spawn in custom dimension in custom structure
+                          - True, your spawn in custom dimension
                           - False, your spawn in minecraft vanilla world""")
                 .define("Allowed Spawn Custom", Boolean.TRUE);
 
 
         DIMENSION_NAME_OF_THE_SPAWN = BUILDER.comment("Name of the dimension (path + mod Id) where you appear")
                 .define("Dimension Name", DimensionsConstants.ASTEROID_FIELD_DIMENSION);
+
+        ALLOWED_SPAWN_WITH_STRUCTURE_CUSTOM = BUILDER.comment("""
+                        Allowed the spawn custom with structure custom.
+                          - True, your spawn in custom structure
+                          - False, your spawn in platform 3x3""")
+                .define("Allowed Spawn Structure Custom", Boolean.TRUE);
 
         BUILDER.pop();
         SPEC = BUILDER.build();

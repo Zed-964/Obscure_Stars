@@ -1,7 +1,5 @@
 package net.zed964.obscure_stars.controler.dimension;
 
-
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +19,7 @@ import net.zed964.obscure_stars.ObscureStarsFileConfig;
 import net.zed964.obscure_stars.exceptions.ExceptionEnum;
 import net.zed964.obscure_stars.exceptions.custom.configuration.BadConfigurationException;
 import net.zed964.obscure_stars.exceptions.custom.configuration.DimensionSpawnNotFoundException;
+import net.zed964.obscure_stars.model.dimensions.SpawnCustom;
 import net.zed964.obscure_stars.utils.LevelUtils;
 
 import java.io.File;
@@ -55,6 +54,7 @@ public class SpawnControl {
         File file = player.server.getFile(LevelResource.PLAYER_DATA_DIR + "\\" + uuid + ".dat");
         if (!file.canRead()) {
             player.teleportTo(ObscureStarsConfig.getSpawnLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+            SpawnCustom.verifySpawn(event);
         }
     }
 
@@ -68,7 +68,10 @@ public class SpawnControl {
                     .getFile(player.getServer().getWorldPath(LevelResource.PLAYER_DATA_DIR) + "\\" + uuid + ".dat");
             if (!file.canRead()) {
                 player.teleportTo(ObscureStarsConfig.getSpawnLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+                SpawnCustom.verifySpawn(event);
             }
         }
     }
+
+
 }
