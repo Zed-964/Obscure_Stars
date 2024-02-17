@@ -10,9 +10,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import net.zed964.obscure_stars.ObscureStars;
-import net.zed964.obscure_stars.model.effects.dimension.SuffocationEffect;
-import net.zed964.obscure_stars.vue.effects.suffocation.SuffocationColor;
-import net.zed964.obscure_stars.vue.effects.suffocation.SuffocationFog;
+import net.zed964.obscure_stars.model.effects.custom.SuffocationEffect;
 
 /**
  * Class pour déclarer tous les effets du mod
@@ -23,7 +21,7 @@ public class ObscureStarsEffects {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, ObscureStars.MOD_ID);
 
     public static final RegistryObject<MobEffect> SUFFOCATION_EFFECT = MOB_EFFECTS.register("suffocation",
-            () -> new SuffocationEffect(MobEffectCategory.HARMFUL, 0, new SuffocationFog(), new SuffocationColor()));
+            () -> new SuffocationEffect(MobEffectCategory.HARMFUL, 0));
 
     /**
      * Constructeur privé par défaut

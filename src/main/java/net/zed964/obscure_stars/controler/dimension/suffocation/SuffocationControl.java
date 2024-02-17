@@ -1,10 +1,9 @@
 package net.zed964.obscure_stars.controler.dimension.suffocation;
 
-import com.mojang.blaze3d.shaders.FogShape;
-
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ViewportEvent;
@@ -16,14 +15,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.zed964.obscure_stars.ObscureStars;
 import net.zed964.obscure_stars.constants.DimensionsConstants;
 import net.zed964.obscure_stars.model.armors.ObscureStarsArmors;
+import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 import net.zed964.obscure_stars.model.effects.ObscureStarsEffects;
-import net.zed964.obscure_stars.model.effects.dimension.SuffocationEffect;
 import net.zed964.obscure_stars.utils.EventUtils;
 import net.zed964.obscure_stars.utils.PLayerUtils;
-import net.zed964.obscure_stars.vue.effects.suffocation.SuffocationColor;
-import net.zed964.obscure_stars.vue.effects.suffocation.SuffocationFog;
-
-import java.util.Objects;
+import net.zed964.obscure_stars.vue.fog.CustomFog;
+import net.zed964.obscure_stars.vue.fog.CustomFogColor;
+import net.zed964.obscure_stars.vue.fog.custom.SuffocationColor;
+import net.zed964.obscure_stars.vue.fog.custom.SuffocationFog;
 
 /**
  * Contrôle de l'effet suffocation sur un joueur
@@ -32,7 +31,7 @@ import java.util.Objects;
 public class SuffocationControl {
 
     /**
-     * Constructeur privé, car on est sur une classe qui attrape les events
+     * Constructeur privé par défaut
      */
     private SuffocationControl() {
 
@@ -92,6 +91,7 @@ public class SuffocationControl {
         }
     }
 
+
     /**
      * Méthode qui change le brouillard sur le joueur lorsqu'il a l'effet suffocation
      * @param event Quand le joueur fait un rendu de brouillard
@@ -99,62 +99,30 @@ public class SuffocationControl {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void addFogOnPlayer(ViewportEvent.RenderFog event) {
-        if (event.getCamera().getEntity() instanceof Player player
-                && (PLayerUtils.hasEffectSuffocation(player))
-                && Objects.requireNonNull(player.getEffect(ObscureStarsEffects.SUFFOCATION_EFFECT.get())).getEffect()
-                instanceof SuffocationEffect suffocationEffect) {
-
-            SuffocationFog suffocationFog = suffocationEffect.getSuffocationFog();
-
-            // Ici le joueur à l'effet suffocation, on vient vérifier si l'animation du brouillard a débuté
-            // si ce n'est pas le cas, on place les valeurs pour le début de l'animation
-            if (!suffocationFog.getIsProcessingFog() && !suffocationFog.getIsAppliedFog()) {
-                suffocationFog.setCurrentValueWhenStartingFog(event);
+        if (event.getCamera().getEntity() instanceof Player
+                && CustomFog.getStatusFog() != CustomFogCapImpl.StatusDirectionCustomFog.OFF) {
+            switch (CustomFog.getStatusFog()) {
+                case DECREASE -> SuffocationFog.animationFogDecrease(event);
+                case INCREASE -> SuffocationFog.animationFogIncrease(event);
+                default -> SuffocationFog.animationFogFinish(event);
             }
-
-            // on actualise l'animation du brouillard
-            if (!suffocationFog.getIsAppliedFog()) {
-                suffocationFog.animatingNearFog(event);
-                suffocationFog.animatingFarFog(event);
-                suffocationFog.animatingFinish();
-            } else {
-                suffocationFog.fogFinalApplied(event);
-            }
-
-            event.setFogShape(FogShape.SPHERE);
-            event.setCanceled(true);
         }
     }
 
     /**
-     * Méthode qui change al couleur du brouillard sur le joueur lorsqu'il a l'effet suffocation
+     * Méthode qui change la couleur du brouillard sur le joueur lorsqu'il a l'effet suffocation
      * @param event Quand le joueur fait un rendu de couleur du brouillard
      */
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void addColorFogOnPlayer(ViewportEvent.ComputeFogColor event) {
-        if (event.getCamera().getEntity() instanceof Player player
-                && (PLayerUtils.hasEffectSuffocation(player))
-                && Objects.requireNonNull(player.getEffect(ObscureStarsEffects.SUFFOCATION_EFFECT.get())).getEffect()
-                instanceof SuffocationEffect suffocationEffect) {
-
-            SuffocationColor suffocationColor = suffocationEffect.getSuffocationColor();
-
-            // Ici le joueur à l'effet suffocation, on vient vérifier si l'animation de la couleur du brouillard a débuté
-            // si ce n'est pas le cas, on place les valeurs pour le début de l'animation
-            if (!suffocationColor.getIsProcessingColor()) {
-                suffocationColor.setCurrentValueWhenStartingColor(event);
+        if (event.getCamera().getEntity() instanceof Player
+               && CustomFogColor.getStatusFogColor() != CustomFogCapImpl.StatusDirectionCustomFog.OFF) {
+            switch (CustomFogColor.getStatusFogColor()) {
+                case DECREASE -> SuffocationColor.animationColorDecrease(event);
+                case INCREASE -> SuffocationColor.animationColorIncrease(event);
+                default -> SuffocationColor.animationColorFinish(event);
             }
-
-            // on actualise l'animation de la couleur du brouillard
-            if (!suffocationColor.getIsAppliedColor()) {
-                suffocationColor.setColorOnFog(event);
-                suffocationColor.colorFinish();
-            } else {
-                suffocationColor.colorFinalApplied(event);
-            }
-
-            event.setCanceled(true);
         }
     }
 }
