@@ -21,4 +21,14 @@ public class MethodUtils {
     public static float keepMaxValue(float target, float value) {
         return Math.max(target, value);
     }
+
+    /**
+     * Fonction renvoie la plus petite valeur des 2 paramètres
+     * @param target Valeur que l'on essaye d'atteindre
+     * @param value Valeur actuelle que l'on a
+     * @return La plus petite valeur
+     */
+    public static float keepMinValue(float target, float value) {
+        return Math.min(target, value);
+    }
 }
