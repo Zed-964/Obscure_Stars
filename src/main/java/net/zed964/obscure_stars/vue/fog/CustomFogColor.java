@@ -2,7 +2,9 @@ package net.zed964.obscure_stars.vue.fog;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import net.minecraftforge.client.event.ViewportEvent;
+
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 import net.zed964.obscure_stars.model.packets.ObscureStarsPackets;
 import net.zed964.obscure_stars.model.packets.custom.C2SSyncStatusColorFog;
@@ -11,21 +13,21 @@ public abstract class CustomFogColor {
 
     @Getter
     @Setter
-    protected static CustomFogCapImpl.StatusDirectionCustomFog statusFogColor = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
+    protected CustomFogCapImpl.StatusDirectionCustomFog statusFogColor = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
 
-    protected static float beginningRed;
+    protected float beginningRed;
 
-    protected static float beginningBlue;
+    protected float beginningBlue;
 
-    protected static float beginningGreen;
+    protected float beginningGreen;
 
-    protected static float currentRed;
+    protected float currentRed;
 
-    protected static float currentBlue;
+    protected float currentBlue;
 
-    protected static float currentGreen;
+    protected float currentGreen;
 
-    protected static boolean isAnimatingColor = false;
+    protected boolean isAnimatingColor = false;
 
     protected CustomFogColor() {
 
@@ -35,7 +37,7 @@ public abstract class CustomFogColor {
      * Stock les valeurs de la couleur au début de l'animation du brouillard
      * @param event Event lors du rendu de la couleur du brouillard
      */
-    public static void setBeginningValueWhenStartingColor(ViewportEvent.ComputeFogColor event) {
+    public void setBeginningValueWhenStartingColor(ViewportEvent.ComputeFogColor event) {
         beginningRed = event.getRed();
         beginningGreen = event.getGreen();
         beginningBlue = event.getBlue();
@@ -51,7 +53,7 @@ public abstract class CustomFogColor {
      * @param currentValue Valeur actuelle de l'animation
      * @return La vitesse d'augmentation de l'animation (négative si on diminue et positif si on augmente)
      */
-    public static float speedAnimationColor(float target, float currentValue) {
+    public float speedAnimationColor(float target, float currentValue) {
         if (currentValue > target) {
             return -0.0005F;
         }
@@ -65,7 +67,7 @@ public abstract class CustomFogColor {
      * @param greenTarget Valeur couleur verte de fin d'animation
      * @return True si toutes les valeurs des couleurs de fin d'animation est atteinte, False si une des valeurs des couleurs ne sont pas atteintes
      */
-    public static boolean isFinishAnimatedColor(float redTarget, float blueTarget, float greenTarget) {
+    public boolean isFinishAnimatedColor(float redTarget, float blueTarget, float greenTarget) {
         if (currentRed == redTarget && currentBlue == blueTarget && currentGreen == greenTarget) {
             isAnimatingColor = false;
             return true;
@@ -77,7 +79,7 @@ public abstract class CustomFogColor {
     /**
      * Set toutes les valeurs à 0 quand l'animation est terminé
      */
-    public static void setValueForAnimationColorOff() {
+    public void setValueForAnimationColorOff() {
         currentRed = 0.0F;
         currentBlue = 0.0F;
         currentGreen = 0.0F;

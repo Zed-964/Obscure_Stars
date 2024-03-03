@@ -1,22 +1,30 @@
 package net.zed964.obscure_stars.vue.fog.custom;
 
 import com.mojang.blaze3d.shaders.FogShape;
+
+import lombok.Getter;
 import net.minecraftforge.client.event.ViewportEvent;
+
 import net.zed964.obscure_stars.constants.EffectsConstants;
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 import net.zed964.obscure_stars.model.packets.ObscureStarsPackets;
 import net.zed964.obscure_stars.model.packets.custom.C2SSyncStatusFog;
 import net.zed964.obscure_stars.utils.MethodUtils;
 import net.zed964.obscure_stars.vue.fog.CustomFog;
+
 import org.jetbrains.annotations.NotNull;
 
-public class SuffocationFog extends CustomFog {
+public class SuffocationFog extends CustomFog implements AnimationFog {
 
-    /**
-     * Animation du brouillard lorsque le status de l'effet Suffocation vaut DECREASE
-     * @param event Rendu du brouillard por le client
-     */
-    public static void animationFogDecrease(ViewportEvent.RenderFog event) {
+    @Getter
+    private static final SuffocationFog instance = new SuffocationFog();
+
+    private SuffocationFog() {
+
+    }
+
+    @Override
+    public void animationFogDecrease(ViewportEvent.RenderFog event) {
         if (!isActiveAnimation) {
             setBeginningValueWhenStartingFog(event.getRenderer());
             isActiveAnimation = true;
@@ -42,11 +50,8 @@ public class SuffocationFog extends CustomFog {
         event.setCanceled(true);
     }
 
-    /**
-     * Animation du brouillard lorsque le status de l'effet Suffocation vaut INCREASE
-     * @param event Rendu du brouillard por le client
-     */
-    public static void animationFogIncrease(ViewportEvent.RenderFog event) {
+    @Override
+    public void animationFogIncrease(ViewportEvent.RenderFog event) {
         if (!isActiveAnimation) {
             isActiveAnimation = true;
             isAnimatingNearFog = true;
@@ -72,11 +77,8 @@ public class SuffocationFog extends CustomFog {
         event.setCanceled(true);
     }
 
-    /**
-     * Animation du brouillard lorsque le status de l'effet Suffocation vaut FINISH
-     * @param event Rendu du brouillard por le client
-     */
-    public static void animationFogFinish(ViewportEvent.@NotNull RenderFog event) {
+    @Override
+    public void animationFogFinish(ViewportEvent.@NotNull RenderFog event) {
         event.setNearPlaneDistance(EffectsConstants.SUFFOCATION_FOG_NEAR_END);
         event.setFarPlaneDistance(EffectsConstants.SUFFOCATION_FOG_FAR_END);
 

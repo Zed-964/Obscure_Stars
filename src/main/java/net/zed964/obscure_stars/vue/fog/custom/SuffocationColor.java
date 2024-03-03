@@ -1,5 +1,7 @@
 package net.zed964.obscure_stars.vue.fog.custom;
 
+import lombok.Getter;
+
 import net.minecraftforge.client.event.ViewportEvent;
 
 import net.zed964.obscure_stars.constants.EffectsConstants;
@@ -9,13 +11,17 @@ import net.zed964.obscure_stars.model.packets.custom.C2SSyncStatusColorFog;
 import net.zed964.obscure_stars.utils.MethodUtils;
 import net.zed964.obscure_stars.vue.fog.CustomFogColor;
 
-public class SuffocationColor extends CustomFogColor {
+public class SuffocationColor extends CustomFogColor implements AnimationFogColor {
 
-    /**
-     * Animation de la couleur du brouillard lorsque le status de l'effet Suffocation vaut DECREASE
-     * @param event Rendu de la couleur du brouillard por le client
-     */
-    public static void animationColorDecrease(ViewportEvent.ComputeFogColor event) {
+    @Getter
+    private static final SuffocationColor instance = new SuffocationColor();
+
+    private SuffocationColor() {
+
+    }
+
+    @Override
+    public void animationColorDecrease(ViewportEvent.ComputeFogColor event) {
         if (!isAnimatingColor) {
             setBeginningValueWhenStartingColor(event);
             isAnimatingColor = true;
@@ -41,11 +47,8 @@ public class SuffocationColor extends CustomFogColor {
         event.setCanceled(true);
     }
 
-    /**
-     * Animation de la couleur du brouillard lorsque le status de l'effet Suffocation vaut INCREASE
-     * @param event Rendu de la couleur du brouillard por le client
-     */
-    public static void animationColorIncrease(ViewportEvent.ComputeFogColor event) {
+    @Override
+    public void animationColorIncrease(ViewportEvent.ComputeFogColor event) {
         isAnimatingColor = true;
 
         currentRed += speedAnimationColor(beginningRed, currentRed);
@@ -69,11 +72,8 @@ public class SuffocationColor extends CustomFogColor {
         event.setCanceled(true);
     }
 
-    /**
-     * Animation de la couleur du brouillard lorsque le status de l'effet Suffocation vaut FINISH
-     * @param event Rendu de la couleur du brouillard por le client
-     */
-    public static void animationColorFinish(ViewportEvent.ComputeFogColor event) {
+    @Override
+    public void animationColorFinish(ViewportEvent.ComputeFogColor event) {
         event.setRed(EffectsConstants.SUFFOCATION_FOG_COLOR_RED_END);
         event.setBlue(EffectsConstants.SUFFOCATION_FOG_COLOR_BLUE_END);
         event.setGreen(EffectsConstants.SUFFOCATION_FOG_COLOR_GREEN_END);

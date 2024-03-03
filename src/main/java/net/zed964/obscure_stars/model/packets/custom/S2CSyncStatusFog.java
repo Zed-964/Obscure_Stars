@@ -6,6 +6,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 import net.zed964.obscure_stars.vue.fog.CustomFog;
+import net.zed964.obscure_stars.vue.fog.custom.SuffocationFog;
 
 import java.util.function.Supplier;
 
@@ -14,14 +15,20 @@ import java.util.function.Supplier;
  */
 public class S2CSyncStatusFog {
     
-    private final String statusFog;
+    private final CustomFogCapImpl.StatusDirectionCustomFog statusFog;
+
+    private CustomFogCapImpl.CustomFogEffect customFog;
+
 
     /**
      * Constructeur par défaut
      * @param statusFog Status du brouillard
      */
-    public S2CSyncStatusFog(String statusFog) {
+    public S2CSyncStatusFog(CustomFogCapImpl.StatusDirectionCustomFog statusFog, CustomFog customFog) {
        this.statusFog = statusFog;
+       if (customFog instanceof SuffocationFog) {
+           this.customFog = CustomFogCapImpl.CustomFogEffect.SUFFOCATION;
+       }
     }
 
     /**
@@ -29,7 +36,8 @@ public class S2CSyncStatusFog {
      * @param buf Données d'un packet réseau
      */
     public S2CSyncStatusFog(FriendlyByteBuf buf) {
-        this.statusFog = buf.readUtf();
+        this.statusFog = buf.readEnum(CustomFogCapImpl.StatusDirectionCustomFog.class);
+        this.customFog = buf.readEnum(CustomFogCapImpl.CustomFogEffect.class);
     }
 
     /**
@@ -37,7 +45,8 @@ public class S2CSyncStatusFog {
      * @param buf Données d'un packet réseau
      */
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeUtf(statusFog);
+        buf.writeEnum(statusFog);
+        buf.writeEnum(customFog);
     }
 
     /**
@@ -46,6 +55,10 @@ public class S2CSyncStatusFog {
      */
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> CustomFog.setStatusFog(CustomFogCapImpl.StatusDirectionCustomFog.valueOf(statusFog)));
+        context.enqueueWork(() -> {
+            if (customFog == CustomFogCapImpl.CustomFogEffect.SUFFOCATION) {
+                SuffocationFog.getInstance().setStatusFog(statusFog);
+            }
+        });
     }
 }

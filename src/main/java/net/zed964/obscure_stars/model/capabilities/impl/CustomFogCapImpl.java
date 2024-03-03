@@ -14,6 +14,10 @@ public  class CustomFogCapImpl implements CustomFogCap {
         FINISH
     }
 
+    public enum CustomFogEffect {
+        SUFFOCATION
+    }
+
     private StatusDirectionCustomFog statusFog;
 
     private StatusDirectionCustomFog statusColor;

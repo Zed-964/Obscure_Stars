@@ -19,8 +19,6 @@ import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 import net.zed964.obscure_stars.model.effects.ObscureStarsEffects;
 import net.zed964.obscure_stars.utils.EventUtils;
 import net.zed964.obscure_stars.utils.PLayerUtils;
-import net.zed964.obscure_stars.vue.fog.CustomFog;
-import net.zed964.obscure_stars.vue.fog.CustomFogColor;
 import net.zed964.obscure_stars.vue.fog.custom.SuffocationColor;
 import net.zed964.obscure_stars.vue.fog.custom.SuffocationFog;
 
@@ -99,12 +97,14 @@ public class SuffocationControl {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void addFogOnPlayer(ViewportEvent.RenderFog event) {
+        SuffocationFog suffocationFog = SuffocationFog.getInstance();
+
         if (event.getCamera().getEntity() instanceof Player
-                && CustomFog.getStatusFog() != CustomFogCapImpl.StatusDirectionCustomFog.OFF) {
-            switch (CustomFog.getStatusFog()) {
-                case DECREASE -> SuffocationFog.animationFogDecrease(event);
-                case INCREASE -> SuffocationFog.animationFogIncrease(event);
-                default -> SuffocationFog.animationFogFinish(event);
+                && suffocationFog.getStatusFog() != CustomFogCapImpl.StatusDirectionCustomFog.OFF) {
+            switch (suffocationFog.getStatusFog()) {
+                case DECREASE -> suffocationFog.animationFogDecrease(event);
+                case INCREASE -> suffocationFog.animationFogIncrease(event);
+                default -> suffocationFog.animationFogFinish(event);
             }
         }
     }
@@ -116,12 +116,14 @@ public class SuffocationControl {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void addColorFogOnPlayer(ViewportEvent.ComputeFogColor event) {
+        SuffocationColor suffocationColor = SuffocationColor.getInstance();
+
         if (event.getCamera().getEntity() instanceof Player
-               && CustomFogColor.getStatusFogColor() != CustomFogCapImpl.StatusDirectionCustomFog.OFF) {
-            switch (CustomFogColor.getStatusFogColor()) {
-                case DECREASE -> SuffocationColor.animationColorDecrease(event);
-                case INCREASE -> SuffocationColor.animationColorIncrease(event);
-                default -> SuffocationColor.animationColorFinish(event);
+               && suffocationColor.getStatusFogColor() != CustomFogCapImpl.StatusDirectionCustomFog.OFF) {
+            switch (suffocationColor.getStatusFogColor()) {
+                case DECREASE -> suffocationColor.animationColorDecrease(event);
+                case INCREASE -> suffocationColor.animationColorIncrease(event);
+                default -> suffocationColor.animationColorFinish(event);
             }
         }
     }

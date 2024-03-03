@@ -15,21 +15,21 @@ public abstract class CustomFog {
 
     @Getter
     @Setter
-    protected static CustomFogCapImpl.StatusDirectionCustomFog statusFog = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
+    protected CustomFogCapImpl.StatusDirectionCustomFog statusFog = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
 
-    protected static float beginningNearFogPos;
+    protected float beginningNearFogPos;
 
-    protected static float beginningFarFogPos;
+    protected float beginningFarFogPos;
 
-    protected static float currentNearFogPos;
+    protected float currentNearFogPos;
 
-    protected static float currentFarFogPos;
+    protected float currentFarFogPos;
 
-    protected static boolean isActiveAnimation = false;
+    protected boolean isActiveAnimation = false;
 
-    protected static boolean isAnimatingNearFog = true;
+    protected boolean isAnimatingNearFog = true;
 
-    protected static boolean isAnimatingFarFog = true;
+    protected boolean isAnimatingFarFog = true;
 
     protected CustomFog() {
 
@@ -39,7 +39,7 @@ public abstract class CustomFog {
      * Set toutes les valeurs du brouillard pour le début de l'animation
      * @param renderer Rendu du client
      */
-    public static void setBeginningValueWhenStartingFog(@NotNull GameRenderer renderer) {
+    public void setBeginningValueWhenStartingFog(@NotNull GameRenderer renderer) {
         beginningNearFogPos = renderer.getRenderDistance() / 1.25F;
         beginningFarFogPos = renderer.getRenderDistance();
 
@@ -53,7 +53,7 @@ public abstract class CustomFog {
      * @param targetFar Valeur éloignée de fin d'animation
      * @return la vitesse d'augmentation de l'animation (négative si on diminue et positif si on augmente)
      */
-    protected static float speedAnimationFog(float targetNear, float targetFar) {
+    protected float speedAnimationFog(float targetNear, float targetFar) {
         if (statusFog == CustomFogCapImpl.StatusDirectionCustomFog.DECREASE) {
             if (currentNearFogPos > targetNear + 200) {
                 return -0.16F;
@@ -91,7 +91,7 @@ public abstract class CustomFog {
      * @param farTarget Valeur éloignée de fin d'animation
      * @return True si l'animation du brouillard proche et éloigné est terminé, False si une des animations n'est pas terminé
      */
-    public static boolean isFinishAnimatedFog(float nearTarget, float farTarget) {
+    public boolean isFinishAnimatedFog(float nearTarget, float farTarget) {
         isAnimatingNearFog = nearTarget != currentNearFogPos;
         isAnimatingFarFog = farTarget != currentFarFogPos;
 
@@ -105,7 +105,7 @@ public abstract class CustomFog {
     /**
      * Set toutes les valeurs à 0 quand l'animation est terminé
      */
-    public static void setValueForAnimationFogOff() {
+    public void setValueForAnimationFogOff() {
         currentNearFogPos = 0.0F;
         currentFarFogPos = 0.0F;
         beginningNearFogPos = 0.0F;
