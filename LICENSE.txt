@@ -1,0 +1,44 @@
+                                    Obscure Stars License 1.0
+                                        29/09/2022
+                                       
+The Obscure Stars License protects the Obscure Stars Project and dedicated addons.
+
+You are completely free and have the right to Use, Share and Adapt the mod. These rights can not be removed from you as long as follow the license terms.
+
+For the Modpack Makers usage of the Obscure Stars .jar file in modpacks is allowed as long as both conditions are fulfilled :
+        - The mod is unmodified (excluding modification of config-files) except if i give the personnal permission to modify it.
+        - The Obscure Stars .jar used in the modpack was obtained on either CurseForge, Modrinth or Discord.
+        - We have no intention of suing anyone for breaking it, the worst that can happen to you if you do is that I'll get annoyed and ask you to rectify your mistake. 
+          If you use a public distribution platform (such as CurseForge) it's also possible your project will get taken down.
+        
+
+1. General :
+        - We will not give any permission unless we know what you want to do in your project.
+          We already see too much " copy-paste " mod following the version of minecraft without appropriate credit to the initial creator.
+        - All restrictive clauses in this license can be ignored with personal permission.
+
+2. If you want to Distribute Obscure Stars Project :
+        - Non-Monetary Clause
+          You may not charge for access to the distribution itself or gain money through it, this includes any type of inline advertisement, such as url shorteners (adf.ly or otherwise) or ads in your service slowing the download down.
+          This includes restricting any amount of access behind a paywall. 
+          Charging for ingame goods such as mod items or cosmetic features on a server does not count as distribution and falls purely under the Mojang Terms of Service.
+        - Attribution Clause
+          You must give appropriate credit to creator of the mod belonging to Obscure Stars Project.
+          If you do any alterations, you will need to ask the permission of the creator to distribute. 
+          A link back is optional but it would be very appreciated.
+  
+ 3. If you want to Feature* Obscure Stars Project :
+        - You must not claim that you made TestMod ( or any mod addons... ). You may give appropriate credit to the creator if you want to.
+ 
+ 4. If you want to Use Obscure Stars Project's Code or Assets :
+        - Any assets from the Obscure Stars Project’s source files published on GitHub or other may not be used in any other public projects except Modpacks and addons Project.
+        - You can use any code for yourself if you ask to the creator and he give his permission.
+          You must give appropriate credit to the creator for the parts of it you're using.
+          If you do any alterations the fact that you do so should also be indicated.
+          A link back is optional but it would be very appreciated.
+        - Your project must be open source and include a clause similar to this one in its license.
+          
+          
+ All other rights reserved unless otherwise explicitly stated.
+
+ * : "Featuring" refers to using TestMod in an environment where you do not distribute binaries, assets, or source. An example would be a YouTube Let's Play.
