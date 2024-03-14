@@ -1,4 +1,4 @@
-package net.zed964.obscure_stars.controler.dimension;
+package net.zed964.obscure_stars.controler.dimensions;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
@@ -23,6 +23,7 @@ import net.zed964.obscure_stars.model.dimensions.SpawnCustom;
 import net.zed964.obscure_stars.utils.LevelUtils;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = ObscureStars.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -33,16 +34,37 @@ public class SpawnControl {
     }
 
     @SubscribeEvent
-    public static void verifySpawnCustomEnabled(ServerStartingEvent event) throws BadConfigurationException {
+    public static void verifySpawnDimensionCustom(ServerStartingEvent event) throws BadConfigurationException {
         if (Boolean.TRUE.equals(ObscureStarsFileConfig.ALLOWED_SPAWN_CUSTOM.get())) {
             MinecraftServer server = event.getServer();
             for (ServerLevel level : server.getAllLevels()) {
                 if (LevelUtils.getFullNameOfLevel(level).equals(ObscureStarsFileConfig.DIMENSION_NAME_OF_THE_SPAWN.get())) {
-                    ObscureStarsConfig.setSpawnLevel(level);
+                    ObscureStarsConfig.getInstance().setCustomSpawnLevel(level);
                     return;
                 }
             }
             throw new BadConfigurationException(ExceptionEnum.BAD_CONFIGURATION_DEFAULT, new DimensionSpawnNotFoundException(ExceptionEnum.SPAWN_DIMENSION_NOT_FOUND));
+        }
+    }
+
+    @SubscribeEvent
+    public static void verifySpawnStructureCustom(ServerStartingEvent event) throws BadConfigurationException {
+        if (Boolean.TRUE.equals(ObscureStarsFileConfig.ALLOWED_SPAWN_CUSTOM.get())
+            && Boolean.TRUE.equals(ObscureStarsFileConfig.ALLOWED_SPAWN_WITH_STRUCTURE_CUSTOM.get())) {
+
+            File structureCustom = ObscureStarsConfig.getInstance().getStructureFolderPath().toFile();
+            File[] listOfFiles = structureCustom.listFiles();
+
+            if (listOfFiles != null) {
+                for (File file : listOfFiles) {
+                    if (file.getName().equals(ObscureStarsFileConfig.STRUCTURE_FILE_NAME_OF_THE_SPAWN.get()))  {
+                        ObscureStarsConfig.getInstance().setStructureFileName(Path.of(file.getPath()));
+                        break;
+                    }
+                }
+            }
+
+            throw new BadConfigurationException(ExceptionEnum.BAD_CONFIGURATION_DEFAULT, new DimensionSpawnNotFoundException(ExceptionEnum.SPAWN_STRUCTURE_FILE_NOT_FOUND));
         }
     }
 
@@ -53,7 +75,7 @@ public class SpawnControl {
         String uuid = player.getStringUUID();
         File file = player.server.getFile(LevelResource.PLAYER_DATA_DIR + "\\" + uuid + ".dat");
         if (!file.canRead()) {
-            player.teleportTo(ObscureStarsConfig.getSpawnLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+            player.teleportTo(ObscureStarsConfig.getInstance().getCustomSpawnLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
             SpawnCustom.verifySpawn(event);
         }
     }
@@ -67,11 +89,9 @@ public class SpawnControl {
             File file = Objects.requireNonNull(player.getServer())
                     .getFile(player.getServer().getWorldPath(LevelResource.PLAYER_DATA_DIR) + "\\" + uuid + ".dat");
             if (!file.canRead()) {
-                player.teleportTo(ObscureStarsConfig.getSpawnLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+                player.teleportTo(ObscureStarsConfig.getInstance().getCustomSpawnLevel(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
                 SpawnCustom.verifySpawn(event);
             }
         }
     }
-
-
 }

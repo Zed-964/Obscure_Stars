@@ -1,4 +1,4 @@
-package net.zed964.obscure_stars.controler.dimension.suffocation;
+package net.zed964.obscure_stars.controler.dimensions;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
