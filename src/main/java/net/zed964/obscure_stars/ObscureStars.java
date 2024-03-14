@@ -10,6 +10,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import net.zed964.obscure_stars.constants.ObscureStarsConstants;
 import net.zed964.obscure_stars.model.effects.ObscureStarsEffects;
 import net.zed964.obscure_stars.model.items.ObscureStarsItems;
 import net.zed964.obscure_stars.model.packets.ObscureStarsPackets;
@@ -46,7 +47,9 @@ public class ObscureStars {
 
         GeckoLib.initialize();
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ObscureStarsFileConfig.SPEC, ObscureStarsFileConfig.FILE_NAME_CONFIG);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ObscureStarsFileConfig.SPEC, ObscureStarsConstants.FILE_NAME_CONFIG);
+
+        ObscureStarsConfig config = ObscureStarsConfig.getInstance();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

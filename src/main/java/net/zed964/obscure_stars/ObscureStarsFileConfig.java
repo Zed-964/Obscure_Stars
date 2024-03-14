@@ -10,13 +10,13 @@ public class ObscureStarsFileConfig {
 
     public static final ForgeConfigSpec SPEC;
 
-    public static final String FILE_NAME_CONFIG = "obscure-stars-config.toml";
-
     public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOWED_SPAWN_CUSTOM;
 
     public static final ForgeConfigSpec.ConfigValue<String> DIMENSION_NAME_OF_THE_SPAWN;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOWED_SPAWN_WITH_STRUCTURE_CUSTOM;
+
+    public static final ForgeConfigSpec.ConfigValue<String> STRUCTURE_FILE_NAME_OF_THE_SPAWN;
 
     private ObscureStarsFileConfig() {
 
@@ -47,6 +47,12 @@ public class ObscureStarsFileConfig {
                           - True, your spawn in custom structure
                           - False, your spawn in platform 3x3""")
                 .define("Allowed Spawn Structure Custom", Boolean.TRUE);
+
+        // TODO change default value
+        STRUCTURE_FILE_NAME_OF_THE_SPAWN = BUILDER.comment("""
+                Name of the Structure file (dont forget .nbt) where you appear
+                note: you can override any structure when you add a structure file with the same name of one of the file already exits on the mod""")
+                .define("Structure File Name", "test_structure.nbt");
 
         BUILDER.pop();
         SPEC = BUILDER.build();
