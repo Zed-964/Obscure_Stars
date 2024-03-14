@@ -47,7 +47,8 @@ public class SuffocationEffect extends MobEffect {
                 ObscureStarsPackets.sendToPlayer(new S2CSyncStatusFog(cap.getStatusFog(), SuffocationFog.getInstance()), (ServerPlayer) pLivingEntity);
                 ObscureStarsPackets.sendToPlayer(new S2CSyncStatusColorFog(cap.getStatusColor(), SuffocationColor.getInstance()), (ServerPlayer) pLivingEntity);
 
-            } else if (cap.getStatusFog() == CustomFogCapImpl.StatusDirectionCustomFog.FINISH) {
+            } else if (cap.getStatusFog() == CustomFogCapImpl.StatusDirectionCustomFog.FINISH
+                        && cap.getStatusColor() == CustomFogCapImpl.StatusDirectionCustomFog.FINISH) {
                 pLivingEntity.hurt(DamageSource.GENERIC, 2);
             }
         });

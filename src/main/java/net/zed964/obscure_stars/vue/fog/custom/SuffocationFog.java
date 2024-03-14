@@ -68,7 +68,6 @@ public class SuffocationFog extends CustomFog implements AnimationFog {
         event.setNearPlaneDistance(currentNearFogPos);
 
         if (isFinishAnimatedFog(beginningNearFogPos, beginningFarFogPos)) {
-            statusFog = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
             setValueForAnimationFogOff();
             ObscureStarsPackets.sendToServer(new C2SSyncStatusFog(statusFog.toString()));
         }

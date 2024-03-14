@@ -64,7 +64,6 @@ public class SuffocationColor extends CustomFogColor implements AnimationFogColo
         event.setGreen(currentGreen);
 
         if (isFinishAnimatedColor(beginningRed, beginningBlue, beginningGreen)) {
-            statusFogColor = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
             setValueForAnimationColorOff();
             ObscureStarsPackets.sendToServer(new C2SSyncStatusColorFog(statusFogColor.toString()));
         }

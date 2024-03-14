@@ -6,8 +6,6 @@ import lombok.Setter;
 import net.minecraftforge.client.event.ViewportEvent;
 
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
-import net.zed964.obscure_stars.model.packets.ObscureStarsPackets;
-import net.zed964.obscure_stars.model.packets.custom.C2SSyncStatusColorFog;
 
 public abstract class CustomFogColor {
 
@@ -54,6 +52,9 @@ public abstract class CustomFogColor {
      * @return La vitesse d'augmentation de l'animation (négative si on diminue et positif si on augmente)
      */
     public float speedAnimationColor(float target, float currentValue) {
+        if (currentValue == target) {
+            return 0F;
+        }
         if (currentValue > target) {
             return -0.0005F;
         }
@@ -86,6 +87,7 @@ public abstract class CustomFogColor {
         beginningRed = 0.0F;
         beginningBlue = 0.0F;
         beginningGreen = 0.0F;
-        ObscureStarsPackets.sendToServer(new C2SSyncStatusColorFog(statusFogColor.toString()));
+        isAnimatingColor = false;
+        statusFogColor = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
     }
 }

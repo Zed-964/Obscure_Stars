@@ -1,5 +1,6 @@
 package net.zed964.obscure_stars.controler.dimension.suffocation;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
@@ -8,6 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,6 +19,9 @@ import net.zed964.obscure_stars.constants.DimensionsConstants;
 import net.zed964.obscure_stars.model.armors.ObscureStarsArmors;
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 import net.zed964.obscure_stars.model.effects.ObscureStarsEffects;
+import net.zed964.obscure_stars.model.packets.ObscureStarsPackets;
+import net.zed964.obscure_stars.model.packets.custom.C2SSyncStatusColorFog;
+import net.zed964.obscure_stars.model.packets.custom.C2SSyncStatusFog;
 import net.zed964.obscure_stars.utils.EventUtils;
 import net.zed964.obscure_stars.utils.PLayerUtils;
 import net.zed964.obscure_stars.vue.fog.custom.SuffocationColor;
@@ -124,6 +129,21 @@ public class SuffocationControl {
                 case DECREASE -> suffocationColor.animationColorDecrease(event);
                 case INCREASE -> suffocationColor.animationColorIncrease(event);
                 default -> suffocationColor.animationColorFinish(event);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public static void restoreValueWhenPlayerDeath(LivingDeathEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            Player yourself = (Player) Minecraft.getInstance().getCameraEntity();
+            assert yourself != null;
+            if (player.getUUID() == yourself.getUUID()) {
+                SuffocationFog.getInstance().setValueForAnimationFogOff();
+                ObscureStarsPackets.sendToServer(new C2SSyncStatusFog(SuffocationFog.getInstance().getStatusFog().toString()));
+                SuffocationColor.getInstance().setValueForAnimationColorOff();
+                ObscureStarsPackets.sendToServer(new C2SSyncStatusColorFog(SuffocationColor.getInstance().getStatusFogColor().toString()));
             }
         }
     }

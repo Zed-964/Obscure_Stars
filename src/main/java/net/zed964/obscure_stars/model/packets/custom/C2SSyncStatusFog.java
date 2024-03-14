@@ -9,6 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 import net.zed964.obscure_stars.model.capabilities.provider.CustomFogProvider;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -55,6 +56,9 @@ public class C2SSyncStatusFog {
                 customFogCap.setStatusFog(CustomFogCapImpl.StatusDirectionCustomFog.valueOf(statusFog));
                 customFogCap.saveNBTData(new CompoundTag());
             });
+            if (Objects.equals(statusFog, CustomFogCapImpl.StatusDirectionCustomFog.OFF.toString())) {
+                player.removeAllEffects();
+            }
         });
     }
 }

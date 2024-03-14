@@ -6,8 +6,6 @@ import lombok.Setter;
 import net.minecraft.client.renderer.GameRenderer;
 
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
-import net.zed964.obscure_stars.model.packets.ObscureStarsPackets;
-import net.zed964.obscure_stars.model.packets.custom.C2SSyncStatusFog;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -110,6 +108,9 @@ public abstract class CustomFog {
         currentFarFogPos = 0.0F;
         beginningNearFogPos = 0.0F;
         beginningFarFogPos = 0.0F;
-        ObscureStarsPackets.sendToServer(new C2SSyncStatusFog(statusFog.toString()));
+        isActiveAnimation = false;
+        isAnimatingNearFog = false;
+        isAnimatingFarFog = false;
+        statusFog = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
     }
 }
