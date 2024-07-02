@@ -2,20 +2,20 @@ package net.zed964.obscure_stars.model.armors.custom;
 
 import net.minecraft.resources.ResourceLocation;
 import net.zed964.obscure_stars.ObscureStars;
-import net.zed964.obscure_stars.model.items.custom.armor.SpacesuitItem;
+import net.zed964.obscure_stars.model.items.custom.armor.SpaceSuitItem;
 import software.bernie.geckolib.model.GeoModel;
 
 /**
  * Class pour le model de l'armure grâce à Geckolib
  */
-public class SpacesuitModel extends GeoModel<SpacesuitItem> {
+public class SpaceSuitModel extends GeoModel<SpaceSuitItem> {
 
     /**
      * Getter pour le model 3D de l'armure
      * @return Le chemin du fichier ou le model 3D de l'armure est stocké
      */
     @Override
-    public ResourceLocation getModelResource(SpacesuitItem animatable) {
+    public ResourceLocation getModelResource(SpaceSuitItem animatable) {
         return new ResourceLocation(ObscureStars.MOD_ID, "geo/spacesuit.geo.json");
     }
 
@@ -24,7 +24,7 @@ public class SpacesuitModel extends GeoModel<SpacesuitItem> {
      * @return Le chemin du fichier ou la texture de l'armure est stocké
      */
     @Override
-    public ResourceLocation getTextureResource(SpacesuitItem animatable) {
+    public ResourceLocation getTextureResource(SpaceSuitItem animatable) {
         return new ResourceLocation(ObscureStars.MOD_ID, "textures/models/armor/spacesuit.png");
     }
 
@@ -33,7 +33,7 @@ public class SpacesuitModel extends GeoModel<SpacesuitItem> {
      * @return Le chemin du fichier ou l'animation de l'armure est stocké
      */
     @Override
-    public ResourceLocation getAnimationResource(SpacesuitItem animatable) {
+    public ResourceLocation getAnimationResource(SpaceSuitItem animatable) {
         return new ResourceLocation(ObscureStars.MOD_ID, "animations/armor.animation.json");
     }
 }

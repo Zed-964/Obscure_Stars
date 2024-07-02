@@ -9,7 +9,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import net.zed964.obscure_stars.ObscureStars;
 import net.zed964.obscure_stars.model.armors.ObscureStarsArmors;
-import net.zed964.obscure_stars.model.items.custom.armor.SpacesuitItem;
+import net.zed964.obscure_stars.model.items.custom.armor.SpaceSuitItem;
 
 /**
  * Class qui registre tous les items du jeu
@@ -27,16 +27,16 @@ public class ObscureStarsItems {
 
     // ----------------------------------------------------ARMOR----------------------------------------------------- //
     public static final RegistryObject<Item> SPACESUIT_HELMET = ITEMS.register("spacesuit_helmet",
-            () -> new SpacesuitItem(ObscureStarsArmors.SPACESUIT, EquipmentSlot.HEAD, new Item.Properties()));
+            () -> new SpaceSuitItem(ObscureStarsArmors.SPACESUIT, EquipmentSlot.HEAD, new Item.Properties()));
 
     public static final RegistryObject<Item> SPACESUIT_CHESTPLATE = ITEMS.register("spacesuit_chestplate",
-            () -> new SpacesuitItem(ObscureStarsArmors.SPACESUIT, EquipmentSlot.CHEST, new Item.Properties()));
+            () -> new SpaceSuitItem(ObscureStarsArmors.SPACESUIT, EquipmentSlot.CHEST, new Item.Properties()));
 
     public static final RegistryObject<Item> SPACESUIT_LEGGINGS = ITEMS.register("spacesuit_leggings",
-            () -> new SpacesuitItem(ObscureStarsArmors.SPACESUIT, EquipmentSlot.LEGS, new Item.Properties()));
+            () -> new SpaceSuitItem(ObscureStarsArmors.SPACESUIT, EquipmentSlot.LEGS, new Item.Properties()));
 
     public static final RegistryObject<Item> SPACESUIT_BOOTS = ITEMS.register("spacesuit_boots",
-            () -> new SpacesuitItem(ObscureStarsArmors.SPACESUIT, EquipmentSlot.FEET, new Item.Properties()));
+            () -> new SpaceSuitItem(ObscureStarsArmors.SPACESUIT, EquipmentSlot.FEET, new Item.Properties()));
 
 
     /**

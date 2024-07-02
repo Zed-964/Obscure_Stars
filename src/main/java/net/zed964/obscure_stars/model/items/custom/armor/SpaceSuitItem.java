@@ -8,7 +8,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
-import net.zed964.obscure_stars.vue.armors.SpacesuitRenderer;
+import net.zed964.obscure_stars.vue.armors.SpaceSuitRenderer;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 /**
  * Class des items pour l'armure Spacesuit
  */
-public class SpacesuitItem extends ArmorItem implements GeoItem {
+public class SpaceSuitItem extends ArmorItem implements GeoItem {
 
     private final AnimatableInstanceCache animatableInstanceCache = new SingletonAnimatableInstanceCache(this);
 
@@ -33,7 +33,7 @@ public class SpacesuitItem extends ArmorItem implements GeoItem {
      * @param pSlot Slot de l'inventaire d'un joueur
      * @param pProperties Propriété de l'item
      */
-    public SpacesuitItem(ArmorMaterial pMaterial, EquipmentSlot pSlot, Properties pProperties) {
+    public SpaceSuitItem(ArmorMaterial pMaterial, EquipmentSlot pSlot, Properties pProperties) {
         super(pMaterial, pSlot, pProperties);
     }
 
@@ -44,14 +44,14 @@ public class SpacesuitItem extends ArmorItem implements GeoItem {
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            private SpacesuitRenderer spacesuitRenderer;
+            private SpaceSuitRenderer spacesuitRenderer;
 
             @Override
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack,
                                                                    EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
 
                 if (this.spacesuitRenderer == null) {
-                    this.spacesuitRenderer = new SpacesuitRenderer();
+                    this.spacesuitRenderer = new SpaceSuitRenderer();
                 }
 
                 this.spacesuitRenderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
