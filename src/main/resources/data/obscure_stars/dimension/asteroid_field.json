@@ -1,0 +1,11 @@
+{
+  "type": "obscure_stars:asteroid_field_type",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "obscure_stars:asteroid_field",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "obscure_stars:asteroid_desert"
+    }
+  }
+}
