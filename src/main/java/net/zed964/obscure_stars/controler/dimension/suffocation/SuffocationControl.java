@@ -15,7 +15,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import net.zed964.obscure_stars.ObscureStars;
-import net.zed964.obscure_stars.constants.DimensionsConstants;
 import net.zed964.obscure_stars.model.armors.ObscureStarsArmors;
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 import net.zed964.obscure_stars.model.effects.ObscureStarsEffects;
@@ -48,7 +47,7 @@ public class SuffocationControl {
     public static void addSuffocationInDimension(EntityJoinLevelEvent event) {
         if (EventUtils.entityJoinLevelIsServerSide(event)
                 && event.getEntity() instanceof ServerPlayer player
-                && EventUtils.entityJoinLevelGoToDimension(event, DimensionsConstants.ASTEROID_FIELD_PATH)
+                && EventUtils.entityJoinLevelHasSuffocation(event)
                 && !PLayerUtils.hasFullSetArmor(player, ObscureStarsArmors.SPACESUIT)) {
             player.addEffect(new MobEffectInstance(ObscureStarsEffects.SUFFOCATION_EFFECT.get(), 999999999));
         }
@@ -62,7 +61,7 @@ public class SuffocationControl {
     public static void removeSuffocationInDimension(EntityJoinLevelEvent event) {
         if (EventUtils.entityJoinLevelIsServerSide(event)
                 && event.getEntity() instanceof ServerPlayer player
-                && EventUtils.entityJoinLevelIsNotInDimension(event, DimensionsConstants.ASTEROID_FIELD_PATH)
+                && !EventUtils.entityJoinLevelHasSuffocation(event)
                 && PLayerUtils.hasEffectSuffocation(player)) {
             player.removeEffect(ObscureStarsEffects.SUFFOCATION_EFFECT.get());
         }
@@ -77,7 +76,7 @@ public class SuffocationControl {
         // On vérifie que c'est un joueur et la dimension dans laquelle le joueur se trouve
         if (EventUtils.entityJoinLevelIsServerSide(event)
                 && event.getEntity() instanceof ServerPlayer player
-                && EventUtils.entityWhenEquipmentChangeInDimension(event, DimensionsConstants.ASTEROID_FIELD_PATH)) {
+                && EventUtils.entityChangeEquipmentInDimensionHasSuffocation(event)) {
 
             if (PLayerUtils.hasEffectSuffocation(player)) {
                 // Si le joueur à toute son armure, on retire l'effet
@@ -133,6 +132,10 @@ public class SuffocationControl {
         }
     }
 
+    /**
+     * Méthode qui permet de réstorer les valeurs de l'effet suffocation lors de la mort du joueur
+     * @param event Quand une entité meurt
+     */
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void restoreValueWhenPlayerDeath(LivingDeathEvent event) {

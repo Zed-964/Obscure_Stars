@@ -4,6 +4,8 @@ import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 
+import net.zed964.obscure_stars.config.ObscureStarsConfig;
+
 /**
  * Class utilitaire avec des fonctions en rapport avec les events
  */
@@ -26,32 +28,30 @@ public class EventUtils {
     }
 
     /**
-     * Function qui renvoie vraie si l'entité rejoin la dimension en paramètre
+     * Function qui renvoie vraie si l'entité rejoin une dimension ayant l'effet suffocation
      * @param event Event lorsqu'une entité rejoint un monde
-     * @param dimensionName Nom de la dimension
-     * @return True si l'entité rejoint la dimension en paramètre
+     * @return True si l'entité rejoint une dimension avec l'effet de suffocation de paramétrer
      */
-    public static boolean entityJoinLevelGoToDimension(EntityJoinLevelEvent event, String dimensionName) {
-        return event.getLevel().dimension().location().getPath().equals(dimensionName);
+    public static boolean entityJoinLevelHasSuffocation(EntityJoinLevelEvent event) {
+        for (String dimensionPath : ObscureStarsConfig.getInstance().getDimensionsHasSuffocation()) {
+            if (event.getLevel().dimension().location().toString().equals(dimensionPath)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
-     * Function qui renvoie vraie si l'entité n'est pas dans la dimension en paramètre
-     * @param event Event lorsqu'une entité rejoint un monde
-     * @param dimensionName Nom de la dimension
-     * @return True si l'entité n'est pas dans la dimension en paramètre
-     */
-    public static boolean entityJoinLevelIsNotInDimension(EntityJoinLevelEvent event, String dimensionName) {
-        return !event.getLevel().dimension().location().getPath().equals(dimensionName);
-    }
-
-    /**
-     * Function qui renvoie vraie si l'entité modifie son équipement dans la dimension en paramètre
+     * Function qui renvoie vraie si l'entité modifie son équipement dans une dimension ou l'effet suffocation est paramétré
      * @param event Event lorsqu'une entité modifie son équipement
-     * @param dimensionName Nom de la dimension
-     * @return True si l'entité modifie son équipement dans la dimension en paramètre
+     * @return True si l'entité modifie son équipement dans une dimension ayant l'effet de suffocation
      */
-    public static boolean entityWhenEquipmentChangeInDimension(LivingEquipmentChangeEvent event, String dimensionName) {
-        return event.getEntity().getLevel().dimension().location().getPath().equals(dimensionName);
+    public static boolean entityChangeEquipmentInDimensionHasSuffocation(LivingEquipmentChangeEvent event) {
+        for (String dimensionPath : ObscureStarsConfig.getInstance().getDimensionsHasSuffocation()) {
+            if (event.getEntity().getLevel().dimension().location().toString().equals(dimensionPath)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
