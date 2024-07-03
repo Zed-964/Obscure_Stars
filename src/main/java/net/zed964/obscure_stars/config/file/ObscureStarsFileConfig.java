@@ -16,7 +16,7 @@ public class ObscureStarsFileConfig {
 
     public static final String FILE_NAME_CONFIG = "obscure-stars-config.toml";
 
-    public static final ForgeConfigSpec.ConfigValue<List<String>> DIMENSIONS_HAS_SUFFOCATION_EFFECT;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSIONS_HAS_SUFFOCATION_EFFECT;
 
     /**
      * Constructeur privé par défaut
@@ -37,7 +37,7 @@ public class ObscureStarsFileConfig {
         DIMENSIONS_HAS_SUFFOCATION_EFFECT = BUILDER.comment("""
                 Here, you can add all the dimensions you want to have the suffocation effect in.
                     Warning : you need to add the name of the dimension with his namespace i.e. "minecraft:the_end"
-                """).define("List of dimensions that have the suffocation effect", List.of(DimensionsConstants.ASTEROID_FIELD_DIMENSION, "minecraft:the_end"));
+                """).defineList("List of dimensions that have the suffocation effect", List.of(DimensionsConstants.ASTEROID_FIELD_DIMENSION), entry -> true);
 
         BUILDER.pop();
         SPEC = BUILDER.build();
