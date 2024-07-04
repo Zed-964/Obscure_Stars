@@ -9,7 +9,7 @@ import lombok.Getter;
 public enum ExceptionsEnum {
 
     BAD_CONFIGURATION_DEFAULT("An error occurred related to the configuration file", ExceptionCodeEnum.OS_100),
-    DIMENSION_CONFIG_HAS_SUFFOCATION_NOT_FOUND("A dimension who has configure in config file was not fount at the startup of the server", ExceptionCodeEnum.OS_101);
+    DIMENSION_CONFIG_HAS_SUFFOCATION_NOT_FOUND("A dimension who has configure to have suffocation effect in config file was not fount at the startup of the server", ExceptionCodeEnum.OS_101);
 
     private final String message;
 
