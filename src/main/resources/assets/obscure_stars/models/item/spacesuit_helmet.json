@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "obscure_stars:item/spacesuit_helmet"
+  }
+}
