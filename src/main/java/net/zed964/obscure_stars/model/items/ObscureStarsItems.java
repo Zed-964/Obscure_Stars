@@ -2,12 +2,14 @@ package net.zed964.obscure_stars.model.items;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import net.zed964.obscure_stars.ObscureStars;
+import net.zed964.obscure_stars.controler.config.ObscureStarsCreativeTab;
 import net.zed964.obscure_stars.model.armors.ObscureStarsArmors;
 import net.zed964.obscure_stars.model.items.custom.armor.SpaceSuitItem;
 
@@ -45,5 +47,13 @@ public class ObscureStarsItems {
      */
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
+    }
+
+    public static void addCreativeTab(CreativeModeTabEvent.BuildContents event) {
+        if (event.getTab() == ObscureStarsCreativeTab.OBSCURE_STARS_TAB) {
+            for (RegistryObject<Item> objectToAdd : ITEMS.getEntries()) {
+                event.accept(objectToAdd);
+            }
+        }
     }
 }
