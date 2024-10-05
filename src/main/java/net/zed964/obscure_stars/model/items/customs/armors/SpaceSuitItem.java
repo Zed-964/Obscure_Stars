@@ -1,4 +1,4 @@
-package net.zed964.obscure_stars.model.items.custom.armor;
+package net.zed964.obscure_stars.model.items.customs.armors;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.EquipmentSlot;

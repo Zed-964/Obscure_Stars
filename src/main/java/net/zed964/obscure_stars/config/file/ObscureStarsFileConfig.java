@@ -14,7 +14,6 @@ public class ObscureStarsFileConfig {
 
     public static final ForgeConfigSpec SPEC;
 
-    public static final String FILE_NAME_CONFIG = "obscure-stars-config.toml";
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DIMENSIONS_HAS_SUFFOCATION_EFFECT;
 
