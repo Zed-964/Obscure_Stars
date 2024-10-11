@@ -13,19 +13,19 @@ import java.util.function.Supplier;
 /**
  * Synchronisation Serveur to CLient sur le status du brouillard
  */
-public class S2CSyncStatusFog {
+public class S2CSyncStateAnimationFog {
     
-    private final CustomFogCapImpl.StatusDirectionCustomFog statusFog;
+    private final CustomFogCapImpl.StateAnimationCustomFog stateAnimationFog;
 
     private CustomFogCapImpl.CustomFogEffect customFog;
 
 
     /**
      * Constructeur par défaut
-     * @param statusFog Status du brouillard
+     * @param stateAnimationFog Status du brouillard
      */
-    public S2CSyncStatusFog(CustomFogCapImpl.StatusDirectionCustomFog statusFog, CustomFog customFog) {
-       this.statusFog = statusFog;
+    public S2CSyncStateAnimationFog(CustomFogCapImpl.StateAnimationCustomFog stateAnimationFog, CustomFog customFog) {
+       this.stateAnimationFog = stateAnimationFog;
        if (customFog instanceof SuffocationFog) {
            this.customFog = CustomFogCapImpl.CustomFogEffect.SUFFOCATION;
        }
@@ -35,8 +35,8 @@ public class S2CSyncStatusFog {
      * Constructeur lors de la reception d'un packet réseau
      * @param buf Données d'un packet réseau
      */
-    public S2CSyncStatusFog(FriendlyByteBuf buf) {
-        this.statusFog = buf.readEnum(CustomFogCapImpl.StatusDirectionCustomFog.class);
+    public S2CSyncStateAnimationFog(FriendlyByteBuf buf) {
+        this.stateAnimationFog = buf.readEnum(CustomFogCapImpl.StateAnimationCustomFog.class);
         this.customFog = buf.readEnum(CustomFogCapImpl.CustomFogEffect.class);
     }
 
@@ -45,7 +45,7 @@ public class S2CSyncStatusFog {
      * @param buf Données d'un packet réseau
      */
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeEnum(statusFog);
+        buf.writeEnum(stateAnimationFog);
         buf.writeEnum(customFog);
     }
 
@@ -57,7 +57,7 @@ public class S2CSyncStatusFog {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             if (customFog == CustomFogCapImpl.CustomFogEffect.SUFFOCATION) {
-                SuffocationFog.getInstance().setStatusFog(statusFog);
+                SuffocationFog.getInstance().setStateAnimationFog(stateAnimationFog);
             }
         });
     }

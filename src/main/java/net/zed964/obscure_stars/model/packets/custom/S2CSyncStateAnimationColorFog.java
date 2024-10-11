@@ -13,18 +13,18 @@ import java.util.function.Supplier;
 /**
  * Synchronisation Serveur to CLient sur le status de la couleur du brouillard
  */
-public class S2CSyncStatusColorFog {
+public class S2CSyncStateAnimationColorFog {
 
-    private final CustomFogCapImpl.StatusDirectionCustomFog statusColorFog;
+    private final CustomFogCapImpl.StateAnimationCustomFog stateAnimationColorFog;
 
     private CustomFogCapImpl.CustomFogEffect customFogColor;
 
     /**
      * Constructeur par défaut
-     * @param statusColorFog Status de la couleur du brouillard
+     * @param stateAnimationColorFog Status de la couleur du brouillard
      */
-    public S2CSyncStatusColorFog(CustomFogCapImpl.StatusDirectionCustomFog statusColorFog, CustomFogColor customFogColor) {
-       this.statusColorFog = statusColorFog;
+    public S2CSyncStateAnimationColorFog(CustomFogCapImpl.StateAnimationCustomFog stateAnimationColorFog, CustomFogColor customFogColor) {
+       this.stateAnimationColorFog = stateAnimationColorFog;
        if (customFogColor instanceof SuffocationColor) {
            this.customFogColor = CustomFogCapImpl.CustomFogEffect.SUFFOCATION;
        }
@@ -34,8 +34,8 @@ public class S2CSyncStatusColorFog {
      * Constructeur lors de la reception d'un packet réseau
      * @param buf Données d'un packet réseau
      */
-    public S2CSyncStatusColorFog(FriendlyByteBuf buf) {
-        this.statusColorFog = buf.readEnum(CustomFogCapImpl.StatusDirectionCustomFog.class);
+    public S2CSyncStateAnimationColorFog(FriendlyByteBuf buf) {
+        this.stateAnimationColorFog = buf.readEnum(CustomFogCapImpl.StateAnimationCustomFog.class);
         this.customFogColor = buf.readEnum(CustomFogCapImpl.CustomFogEffect.class);
     }
 
@@ -44,7 +44,7 @@ public class S2CSyncStatusColorFog {
      * @param buf Données d'un packet réseau
      */
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeEnum(statusColorFog);
+        buf.writeEnum(stateAnimationColorFog);
         buf.writeEnum(customFogColor);
     }
 
@@ -56,7 +56,7 @@ public class S2CSyncStatusColorFog {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             if (customFogColor == CustomFogCapImpl.CustomFogEffect.SUFFOCATION) {
-                SuffocationColor.getInstance().setStatusFogColor(statusColorFog);
+                SuffocationColor.getInstance().setStateAnimationFogColor(stateAnimationColorFog);
             }
         });
     }

@@ -7,13 +7,15 @@ import net.minecraft.client.renderer.GameRenderer;
 
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 
+import net.zed964.obscure_stars.model.packets.ObscureStarsPackets;
+import net.zed964.obscure_stars.model.packets.custom.C2SSyncStateAnimationFog;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class CustomFog {
 
     @Getter
     @Setter
-    protected CustomFogCapImpl.StatusDirectionCustomFog statusFog = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
+    protected CustomFogCapImpl.StateAnimationCustomFog stateAnimationFog = CustomFogCapImpl.StateAnimationCustomFog.INACTIVE;
 
     protected float beginningNearFogPos;
 
@@ -22,12 +24,6 @@ public abstract class CustomFog {
     protected float currentNearFogPos;
 
     protected float currentFarFogPos;
-
-    protected boolean isActiveAnimation = false;
-
-    protected boolean isAnimatingNearFog = true;
-
-    protected boolean isAnimatingFarFog = true;
 
     protected CustomFog() {
 
@@ -43,6 +39,10 @@ public abstract class CustomFog {
 
         currentNearFogPos = beginningNearFogPos;
         currentFarFogPos = beginningFarFogPos;
+
+        stateAnimationFog = CustomFogCapImpl.StateAnimationCustomFog.APPEARING;
+        ObscureStarsPackets.sendToServer(new C2SSyncStateAnimationFog(stateAnimationFog.toString()));
+
     }
 
     /**
@@ -52,35 +52,35 @@ public abstract class CustomFog {
      * @return la vitesse d'augmentation de l'animation (négative si on diminue et positif si on augmente)
      */
     protected float speedAnimationFog(float targetNear, float targetFar) {
-        if (statusFog == CustomFogCapImpl.StatusDirectionCustomFog.DECREASE) {
+        if (stateAnimationFog == CustomFogCapImpl.StateAnimationCustomFog.APPEARING) {
             if (currentNearFogPos > targetNear + 200) {
-                return -0.16F;
+                return -0.32F;
             }
             if (currentFarFogPos > targetNear + 100) {
-                return -0.08F;
+                return -0.16F;
             }
             if (currentFarFogPos > targetNear + 30) {
-                return -0.04F;
+                return -0.08F;
             }
             if (currentFarFogPos > targetNear + 5) {
-                return -0.02F;
+                return -0.04F;
             }
-            return -0.01F;
+            return -0.02F;
         }
 
         if (currentNearFogPos < targetFar - 200) {
-            return 0.01F;
-        }
-        if (currentNearFogPos < targetFar - 150) {
             return 0.02F;
         }
-        if (currentNearFogPos < targetFar - 75) {
+        if (currentNearFogPos < targetFar - 150) {
             return 0.04F;
         }
-        if (currentNearFogPos < targetFar - 30) {
-            return 0.8F;
+        if (currentNearFogPos < targetFar - 75) {
+            return 0.08F;
         }
-        return 0.16F;
+        if (currentNearFogPos < targetFar - 30) {
+            return 0.16F;
+        }
+        return 0.32F;
     }
 
     /**
@@ -89,28 +89,27 @@ public abstract class CustomFog {
      * @param farTarget Valeur éloignée de fin d'animation
      * @return True si l'animation du brouillard proche et éloigné est terminé, False si une des animations n'est pas terminé
      */
-    public boolean isFinishAnimatedFog(float nearTarget, float farTarget) {
-        isAnimatingNearFog = nearTarget != currentNearFogPos;
-        isAnimatingFarFog = farTarget != currentFarFogPos;
+    public boolean isCompleteAnimatedFog(float nearTarget, float farTarget) {
+        return nearTarget == currentNearFogPos && farTarget == currentFarFogPos;
+    }
 
-        if (!isAnimatingNearFog && !isAnimatingFarFog) {
-            isActiveAnimation = false;
-            return true;
-        }
-        return false;
+    /**
+     * Vérifie si une animation est en cours
+     * @return True si l'animation est en cours
+     */
+    public boolean isAnimating() {
+        return this.stateAnimationFog != CustomFogCapImpl.StateAnimationCustomFog.INACTIVE;
     }
 
     /**
      * Set toutes les valeurs à 0 quand l'animation est terminé
      */
-    public void setValueForAnimationFogOff() {
+    public void setValueForAnimationFogInactive() {
         currentNearFogPos = 0.0F;
         currentFarFogPos = 0.0F;
         beginningNearFogPos = 0.0F;
         beginningFarFogPos = 0.0F;
-        isActiveAnimation = false;
-        isAnimatingNearFog = false;
-        isAnimatingFarFog = false;
-        statusFog = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
+        stateAnimationFog = CustomFogCapImpl.StateAnimationCustomFog.INACTIVE;
+        ObscureStarsPackets.sendToServer(new C2SSyncStateAnimationFog(stateAnimationFog.toString()));
     }
 }

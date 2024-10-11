@@ -5,60 +5,61 @@ import net.minecraft.nbt.CompoundTag;
 import net.zed964.obscure_stars.constants.CapabilitiesConstants;
 import net.zed964.obscure_stars.model.capabilities.CustomFogCap;
 
-public  class CustomFogCapImpl implements CustomFogCap {
+public class CustomFogCapImpl implements CustomFogCap {
 
-    public enum StatusDirectionCustomFog {
-        OFF,
-        DECREASE,
-        INCREASE,
-        FINISH
+    public enum StateAnimationCustomFog {
+        INACTIVE,
+        STARTING,
+        APPEARING,
+        DISAPPEARING,
+        COMPLETE
     }
 
     public enum CustomFogEffect {
         SUFFOCATION
     }
 
-    private StatusDirectionCustomFog statusFog;
+    private StateAnimationCustomFog stateAnimationFog;
 
-    private StatusDirectionCustomFog statusColor;
+    private StateAnimationCustomFog stateAnimationFogColor;
 
     public CustomFogCapImpl() {
-        this.statusFog = StatusDirectionCustomFog.OFF;
-        this.statusColor = StatusDirectionCustomFog.OFF;
+        this.stateAnimationFog = StateAnimationCustomFog.INACTIVE;
+        this.stateAnimationFogColor = StateAnimationCustomFog.INACTIVE;
     }
 
     @Override
     public void saveNBTData(CompoundTag nbt) {
-        nbt.putString(CapabilitiesConstants.CUSTOM_FOG_KEY, this.statusFog.toString());
-        nbt.putString(CapabilitiesConstants.CUSTOM_FOG_COLOR_KEY, this.statusColor.toString());
+        nbt.putString(CapabilitiesConstants.CUSTOM_FOG_KEY, this.stateAnimationFog.toString());
+        nbt.putString(CapabilitiesConstants.CUSTOM_FOG_COLOR_KEY, this.stateAnimationFogColor.toString());
     }
 
     @Override
     public void loadNBTData(CompoundTag nbt) {
         String fogStatus = nbt.getString(CapabilitiesConstants.CUSTOM_FOG_KEY);
-        this.statusFog = StatusDirectionCustomFog.valueOf(fogStatus);
+        this.stateAnimationFog = StateAnimationCustomFog.valueOf(fogStatus);
 
         String colorStatus = nbt.getString(CapabilitiesConstants.CUSTOM_FOG_COLOR_KEY);
-        this.statusColor = StatusDirectionCustomFog.valueOf(colorStatus);
+        this.stateAnimationFogColor = StateAnimationCustomFog.valueOf(colorStatus);
     }
 
     @Override
-    public StatusDirectionCustomFog getStatusFog() {
-        return this.statusFog;
+    public StateAnimationCustomFog getStateAnimationFog() {
+        return this.stateAnimationFog;
     }
 
     @Override
-    public void setStatusFog(StatusDirectionCustomFog statusFog) {
-        this.statusFog = statusFog;
+    public void setStateAnimationFog(StateAnimationCustomFog stateAnimationFog) {
+        this.stateAnimationFog = stateAnimationFog;
     }
 
     @Override
-    public StatusDirectionCustomFog getStatusColor() {
-        return this.statusColor;
+    public StateAnimationCustomFog getStateAnimationFogColor() {
+        return this.stateAnimationFogColor;
     }
 
     @Override
-    public void setStatusColor(StatusDirectionCustomFog statusColor) {
-        this.statusColor = statusColor;
+    public void setStateAnimationFogColor(StateAnimationCustomFog stateAnimationFogColor) {
+        this.stateAnimationFogColor = stateAnimationFogColor;
     }
 }

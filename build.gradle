@@ -5,7 +5,7 @@ plugins {
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-version = '0.0.1-1.19.2'
+version = '0.0.1-1.19.3'
 group = 'net.zed964.obscure_stars' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 base.archivesName = 'obscure_stars'
 
@@ -119,7 +119,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     mavenCentral()
     maven {
-        url 'https://jitpack.io'
+        url = 'https://maven.parchmentmc.org'
     }
 
     maven {

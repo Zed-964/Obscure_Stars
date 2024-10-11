@@ -11,16 +11,16 @@ import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import net.zed964.obscure_stars.ObscureStars;
 import net.zed964.obscure_stars.model.armors.ObscureStarsArmors;
-import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 import net.zed964.obscure_stars.model.effects.ObscureStarsEffects;
 import net.zed964.obscure_stars.model.packets.ObscureStarsPackets;
-import net.zed964.obscure_stars.model.packets.custom.C2SSyncStatusColorFog;
-import net.zed964.obscure_stars.model.packets.custom.C2SSyncStatusFog;
+import net.zed964.obscure_stars.model.packets.custom.C2SSyncStateAnimationColorFog;
+import net.zed964.obscure_stars.model.packets.custom.C2SSyncStateAnimationFog;
 import net.zed964.obscure_stars.utils.EventUtils;
 import net.zed964.obscure_stars.utils.PLayerUtils;
 import net.zed964.obscure_stars.vue.fog.custom.SuffocationColor;
@@ -38,6 +38,8 @@ public class SuffocationControl {
     private SuffocationControl() {
 
     }
+
+    // TODO leave world clean
 
     /**
      * Méthode qui ajoute l'effet suffocation sur un joueur lorsqu'il rejoint une dimension
@@ -75,8 +77,7 @@ public class SuffocationControl {
     public static void controlSuffocationWhenEquipmentChange(LivingEquipmentChangeEvent event) {
         // On vérifie que c'est un joueur et la dimension dans laquelle le joueur se trouve
         if (EventUtils.entityJoinLevelIsServerSide(event)
-                && event.getEntity() instanceof ServerPlayer player
-                && EventUtils.entityChangeEquipmentInDimensionHasSuffocation(event)) {
+                && event.getEntity() instanceof ServerPlayer player) {
 
             if (PLayerUtils.hasEffectSuffocation(player)) {
                 // Si le joueur à toute son armure, on retire l'effet
@@ -85,8 +86,9 @@ public class SuffocationControl {
                 }
             } else {
                 // Si le joueur à un slot d'armure vide ou que son armure n'est pas complete d'un certain type, on ajoute l'effet
-                if (PLayerUtils.hasEmptyEquipmentSlot(player)
-                        || !PLayerUtils.hasFullSetArmor(player, ObscureStarsArmors.SPACESUIT)) {
+                if ((PLayerUtils.hasEmptyEquipmentSlot(player)
+                        || !PLayerUtils.hasFullSetArmor(player, ObscureStarsArmors.SPACESUIT))
+                        && EventUtils.entityChangeEquipmentInDimensionHasSuffocation(event)) {
                     player.addEffect(new MobEffectInstance(ObscureStarsEffects.SUFFOCATION_EFFECT.get(), 999999999));
                 }
             }
@@ -96,7 +98,7 @@ public class SuffocationControl {
 
     /**
      * Méthode qui change le brouillard sur le joueur lorsqu'il a l'effet suffocation
-     * @param event Quand le joueur fait un rendu de brouillard
+     * @param event Quand le joueur fait le rendu du brouillard
      */
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
@@ -104,11 +106,13 @@ public class SuffocationControl {
         SuffocationFog suffocationFog = SuffocationFog.getInstance();
 
         if (event.getCamera().getEntity() instanceof Player
-                && suffocationFog.getStatusFog() != CustomFogCapImpl.StatusDirectionCustomFog.OFF) {
-            switch (suffocationFog.getStatusFog()) {
-                case DECREASE -> suffocationFog.animationFogDecrease(event);
-                case INCREASE -> suffocationFog.animationFogIncrease(event);
-                default -> suffocationFog.animationFogFinish(event);
+                && suffocationFog.isAnimating()) {
+
+            switch (suffocationFog.getStateAnimationFog()) {
+                case STARTING -> suffocationFog.setBeginningValueWhenStartingFog(event.getRenderer());
+                case APPEARING -> suffocationFog.animationFogAppearing(event);
+                case DISAPPEARING -> suffocationFog.animationFogDisappearing(event);
+                default -> suffocationFog.animationFogComplete(event);
             }
         }
     }
@@ -123,11 +127,13 @@ public class SuffocationControl {
         SuffocationColor suffocationColor = SuffocationColor.getInstance();
 
         if (event.getCamera().getEntity() instanceof Player
-               && suffocationColor.getStatusFogColor() != CustomFogCapImpl.StatusDirectionCustomFog.OFF) {
-            switch (suffocationColor.getStatusFogColor()) {
-                case DECREASE -> suffocationColor.animationColorDecrease(event);
-                case INCREASE -> suffocationColor.animationColorIncrease(event);
-                default -> suffocationColor.animationColorFinish(event);
+               && suffocationColor.isAnimating()) {
+
+            switch (suffocationColor.getStateAnimationFogColor()) {
+                case STARTING -> suffocationColor.setBeginningValueWhenStartingColor(event);
+                case APPEARING -> suffocationColor.animationFogColorAppearing(event);
+                case DISAPPEARING -> suffocationColor.animationFogColorDisappearing(event);
+                default -> suffocationColor.animationFogColorComplete(event);
             }
         }
     }
@@ -143,11 +149,16 @@ public class SuffocationControl {
             Player yourself = (Player) Minecraft.getInstance().getCameraEntity();
             assert yourself != null;
             if (player.getUUID() == yourself.getUUID()) {
-                SuffocationFog.getInstance().setValueForAnimationFogOff();
-                ObscureStarsPackets.sendToServer(new C2SSyncStatusFog(SuffocationFog.getInstance().getStatusFog().toString()));
-                SuffocationColor.getInstance().setValueForAnimationColorOff();
-                ObscureStarsPackets.sendToServer(new C2SSyncStatusColorFog(SuffocationColor.getInstance().getStatusFogColor().toString()));
+                SuffocationFog.getInstance().setValueForAnimationFogInactive();
+                SuffocationColor.getInstance().setValueForAnimationColorInactive();
             }
         }
+    }
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public static void restoreValueWhenPlayerLeaveWorld(PlayerEvent.PlayerLoggedOutEvent event) {
+        SuffocationFog.getInstance().setValueForAnimationFogInactive();
+        SuffocationColor.getInstance().setValueForAnimationColorInactive();
     }
 }

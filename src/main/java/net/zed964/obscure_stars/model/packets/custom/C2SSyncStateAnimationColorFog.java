@@ -9,30 +9,29 @@ import net.minecraftforge.network.NetworkEvent;
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 import net.zed964.obscure_stars.model.capabilities.provider.CustomFogProvider;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
- * Synchronisation CLient to Serveur sur le status du brouillard
+ * Synchronisation CLient to Serveur sur le status de la couleur du brouillard
  */
-public class C2SSyncStatusFog {
+public class C2SSyncStateAnimationColorFog {
 
-    private final String statusFog;
+    private final String stateAnimationColorFog;
 
     /**
      * Constructeur par défaut
-     * @param statusFog Status du brouillard
+     * @param stateAnimationColorFog Status de la couleur du brouillard
      */
-    public C2SSyncStatusFog(String statusFog) {
-        this.statusFog = statusFog;
+    public C2SSyncStateAnimationColorFog(String stateAnimationColorFog) {
+        this.stateAnimationColorFog = stateAnimationColorFog;
     }
 
     /**
      * Constructeur lors de la reception d'un packet réseau
      * @param buf Données d'un packet réseau
      */
-    public C2SSyncStatusFog(FriendlyByteBuf buf) {
-        this.statusFog = buf.readUtf();
+    public C2SSyncStateAnimationColorFog(FriendlyByteBuf buf) {
+        this.stateAnimationColorFog = buf.readUtf();
     }
 
     /**
@@ -40,7 +39,7 @@ public class C2SSyncStatusFog {
      * @param buf Données d'un packet réseau
      */
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeUtf(statusFog);
+        buf.writeUtf(stateAnimationColorFog);
     }
 
     /**
@@ -53,12 +52,9 @@ public class C2SSyncStatusFog {
             ServerPlayer player = context.getSender();
             assert player != null;
             player.getCapability(CustomFogProvider.PLAYER_CUSTOM_FOG).ifPresent(customFogCap -> {
-                customFogCap.setStatusFog(CustomFogCapImpl.StatusDirectionCustomFog.valueOf(statusFog));
+                customFogCap.setStateAnimationFogColor(CustomFogCapImpl.StateAnimationCustomFog.valueOf(stateAnimationColorFog));
                 customFogCap.saveNBTData(new CompoundTag());
             });
-            if (Objects.equals(statusFog, CustomFogCapImpl.StatusDirectionCustomFog.OFF.toString())) {
-                player.removeAllEffects();
-            }
         });
     }
 }

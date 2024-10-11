@@ -10,17 +10,17 @@ public interface AnimationFog {
      * Animation du brouillard lorsque le status de l'effet vaut DECREASE
      * @param event Rendu du brouillard por le client
      */
-    void animationFogDecrease(ViewportEvent.RenderFog event);
+    void animationFogAppearing(ViewportEvent.RenderFog event);
 
     /**
      * Animation du brouillard lorsque le status de l'effet vaut INCREASE
      * @param event Rendu du brouillard por le client
      */
-    void animationFogIncrease(ViewportEvent.RenderFog event);
+    void animationFogDisappearing(ViewportEvent.RenderFog event);
 
     /**
      * Animation du brouillard lorsque le status de l'effet vaut FINISH
      * @param event Rendu du brouillard por le client
      */
-    void animationFogFinish(ViewportEvent.@NotNull RenderFog event);
+    void animationFogComplete(ViewportEvent.RenderFog event);
 }

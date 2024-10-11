@@ -11,8 +11,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
 import net.zed964.obscure_stars.model.capabilities.provider.CustomFogProvider;
 import net.zed964.obscure_stars.model.packets.ObscureStarsPackets;
-import net.zed964.obscure_stars.model.packets.custom.S2CSyncStatusColorFog;
-import net.zed964.obscure_stars.model.packets.custom.S2CSyncStatusFog;
+import net.zed964.obscure_stars.model.packets.custom.S2CSyncStateAnimationColorFog;
+import net.zed964.obscure_stars.model.packets.custom.S2CSyncStateAnimationFog;
 import net.zed964.obscure_stars.vue.fog.custom.SuffocationColor;
 import net.zed964.obscure_stars.vue.fog.custom.SuffocationFog;
 
@@ -40,15 +40,16 @@ public class SuffocationEffect extends MobEffect {
     @Override
     public void applyEffectTick(@NotNull LivingEntity pLivingEntity, int pAmplifier) {
         pLivingEntity.getCapability(CustomFogProvider.PLAYER_CUSTOM_FOG).ifPresent(cap -> {
-            if (cap.getStatusFog() == CustomFogCapImpl.StatusDirectionCustomFog.OFF) {
-                cap.setStatusFog(CustomFogCapImpl.StatusDirectionCustomFog.DECREASE);
-                cap.setStatusColor(CustomFogCapImpl.StatusDirectionCustomFog.DECREASE);
-                cap.saveNBTData(new CompoundTag());
-                ObscureStarsPackets.sendToPlayer(new S2CSyncStatusFog(cap.getStatusFog(), SuffocationFog.getInstance()), (ServerPlayer) pLivingEntity);
-                ObscureStarsPackets.sendToPlayer(new S2CSyncStatusColorFog(cap.getStatusColor(), SuffocationColor.getInstance()), (ServerPlayer) pLivingEntity);
+            if (cap.getStateAnimationFog() == CustomFogCapImpl.StateAnimationCustomFog.INACTIVE
+                    && cap.getStateAnimationFogColor() == CustomFogCapImpl.StateAnimationCustomFog.INACTIVE) {
+                cap.setStateAnimationFog(CustomFogCapImpl.StateAnimationCustomFog.STARTING);
+                cap.setStateAnimationFogColor(CustomFogCapImpl.StateAnimationCustomFog.STARTING);
 
-            } else if (cap.getStatusFog() == CustomFogCapImpl.StatusDirectionCustomFog.FINISH
-                        && cap.getStatusColor() == CustomFogCapImpl.StatusDirectionCustomFog.FINISH) {
+                cap.saveNBTData(new CompoundTag());
+                ObscureStarsPackets.sendToPlayer(new S2CSyncStateAnimationFog(cap.getStateAnimationFog(), SuffocationFog.getInstance()), (ServerPlayer) pLivingEntity);
+                ObscureStarsPackets.sendToPlayer(new S2CSyncStateAnimationColorFog(cap.getStateAnimationFogColor(), SuffocationColor.getInstance()), (ServerPlayer) pLivingEntity);
+            } else if (cap.getStateAnimationFog() == CustomFogCapImpl.StateAnimationCustomFog.COMPLETE
+                        && cap.getStateAnimationFogColor() == CustomFogCapImpl.StateAnimationCustomFog.COMPLETE) {
                 pLivingEntity.hurt(DamageSource.GENERIC, 2);
             }
         });
@@ -65,11 +66,13 @@ public class SuffocationEffect extends MobEffect {
         super.removeAttributeModifiers(pLivingEntity, pAttributeMap, pAmplifier);
 
         pLivingEntity.getCapability(CustomFogProvider.PLAYER_CUSTOM_FOG).ifPresent(cap -> {
-            cap.setStatusFog(CustomFogCapImpl.StatusDirectionCustomFog.INCREASE);
-            cap.setStatusColor(CustomFogCapImpl.StatusDirectionCustomFog.INCREASE);
+            cap.setStateAnimationFog(CustomFogCapImpl.StateAnimationCustomFog.DISAPPEARING);
+            cap.setStateAnimationFogColor(CustomFogCapImpl.StateAnimationCustomFog.DISAPPEARING);
             cap.saveNBTData(new CompoundTag());
-            ObscureStarsPackets.sendToPlayer(new S2CSyncStatusFog(cap.getStatusFog(), SuffocationFog.getInstance()), (ServerPlayer) pLivingEntity);
-            ObscureStarsPackets.sendToPlayer(new S2CSyncStatusColorFog(cap.getStatusColor(), SuffocationColor.getInstance()), (ServerPlayer) pLivingEntity);
+            ObscureStarsPackets.sendToPlayer(new S2CSyncStateAnimationFog(cap.getStateAnimationFog(), SuffocationFog.getInstance()), (ServerPlayer) pLivingEntity);
+            ObscureStarsPackets.sendToPlayer(new S2CSyncStateAnimationColorFog(cap.getStateAnimationFogColor(), SuffocationColor.getInstance()), (ServerPlayer) pLivingEntity);
+
+
         });
     }
 

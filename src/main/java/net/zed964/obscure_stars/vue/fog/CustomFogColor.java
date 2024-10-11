@@ -6,12 +6,14 @@ import lombok.Setter;
 import net.minecraftforge.client.event.ViewportEvent;
 
 import net.zed964.obscure_stars.model.capabilities.impl.CustomFogCapImpl;
+import net.zed964.obscure_stars.model.packets.ObscureStarsPackets;
+import net.zed964.obscure_stars.model.packets.custom.C2SSyncStateAnimationColorFog;
 
 public abstract class CustomFogColor {
 
     @Getter
     @Setter
-    protected CustomFogCapImpl.StatusDirectionCustomFog statusFogColor = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
+    protected CustomFogCapImpl.StateAnimationCustomFog stateAnimationFogColor = CustomFogCapImpl.StateAnimationCustomFog.INACTIVE;
 
     protected float beginningRed;
 
@@ -24,8 +26,6 @@ public abstract class CustomFogColor {
     protected float currentBlue;
 
     protected float currentGreen;
-
-    protected boolean isAnimatingColor = false;
 
     protected CustomFogColor() {
 
@@ -43,6 +43,9 @@ public abstract class CustomFogColor {
         currentRed = beginningRed;
         currentGreen = beginningGreen;
         currentBlue = beginningBlue;
+
+        stateAnimationFogColor = CustomFogCapImpl.StateAnimationCustomFog.APPEARING;
+        ObscureStarsPackets.sendToServer(new C2SSyncStateAnimationColorFog(stateAnimationFogColor.toString()));
     }
 
     /**
@@ -69,25 +72,28 @@ public abstract class CustomFogColor {
      * @return True si toutes les valeurs des couleurs de fin d'animation est atteinte, False si une des valeurs des couleurs ne sont pas atteintes
      */
     public boolean isFinishAnimatedColor(float redTarget, float blueTarget, float greenTarget) {
-        if (currentRed == redTarget && currentBlue == blueTarget && currentGreen == greenTarget) {
-            isAnimatingColor = false;
-            return true;
-        } else {
-            return false;
-        }
+        return currentRed == redTarget && currentBlue == blueTarget && currentGreen == greenTarget;
+    }
+
+    /**
+     * Vérifie si une animation est en cours
+     * @return True si l'animation est en cours
+     */
+    public boolean isAnimating() {
+        return this.stateAnimationFogColor != CustomFogCapImpl.StateAnimationCustomFog.INACTIVE;
     }
 
     /**
      * Set toutes les valeurs à 0 quand l'animation est terminé
      */
-    public void setValueForAnimationColorOff() {
+    public void setValueForAnimationColorInactive() {
         currentRed = 0.0F;
         currentBlue = 0.0F;
         currentGreen = 0.0F;
         beginningRed = 0.0F;
         beginningBlue = 0.0F;
         beginningGreen = 0.0F;
-        isAnimatingColor = false;
-        statusFogColor = CustomFogCapImpl.StatusDirectionCustomFog.OFF;
+        stateAnimationFogColor = CustomFogCapImpl.StateAnimationCustomFog.INACTIVE;
+        ObscureStarsPackets.sendToServer(new C2SSyncStateAnimationColorFog(stateAnimationFogColor.toString()));
     }
 }

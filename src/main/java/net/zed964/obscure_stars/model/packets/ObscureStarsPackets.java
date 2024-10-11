@@ -9,10 +9,10 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 import net.zed964.obscure_stars.ObscureStars;
-import net.zed964.obscure_stars.model.packets.custom.C2SSyncStatusColorFog;
-import net.zed964.obscure_stars.model.packets.custom.C2SSyncStatusFog;
-import net.zed964.obscure_stars.model.packets.custom.S2CSyncStatusColorFog;
-import net.zed964.obscure_stars.model.packets.custom.S2CSyncStatusFog;
+import net.zed964.obscure_stars.model.packets.custom.C2SSyncStateAnimationColorFog;
+import net.zed964.obscure_stars.model.packets.custom.C2SSyncStateAnimationFog;
+import net.zed964.obscure_stars.model.packets.custom.S2CSyncStateAnimationColorFog;
+import net.zed964.obscure_stars.model.packets.custom.S2CSyncStateAnimationFog;
 
 /**
  * Gére tous les packets personnalisés du mod
@@ -47,28 +47,28 @@ public class ObscureStarsPackets {
 
         instance = simpleChannel;
 
-        simpleChannel.messageBuilder(C2SSyncStatusFog.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(C2SSyncStatusFog::new)
-                .encoder(C2SSyncStatusFog::toBytes)
-                .consumerMainThread(C2SSyncStatusFog::handle)
+        simpleChannel.messageBuilder(C2SSyncStateAnimationFog.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SSyncStateAnimationFog::new)
+                .encoder(C2SSyncStateAnimationFog::toBytes)
+                .consumerMainThread(C2SSyncStateAnimationFog::handle)
                 .add();
 
-        simpleChannel.messageBuilder(C2SSyncStatusColorFog.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(C2SSyncStatusColorFog::new)
-                .encoder(C2SSyncStatusColorFog::toBytes)
-                .consumerMainThread(C2SSyncStatusColorFog::handle)
+        simpleChannel.messageBuilder(C2SSyncStateAnimationColorFog.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SSyncStateAnimationColorFog::new)
+                .encoder(C2SSyncStateAnimationColorFog::toBytes)
+                .consumerMainThread(C2SSyncStateAnimationColorFog::handle)
                 .add();
 
-        simpleChannel.messageBuilder(S2CSyncStatusFog.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(S2CSyncStatusFog::new)
-                .encoder(S2CSyncStatusFog::toBytes)
-                .consumerMainThread(S2CSyncStatusFog::handle)
+        simpleChannel.messageBuilder(S2CSyncStateAnimationFog.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(S2CSyncStateAnimationFog::new)
+                .encoder(S2CSyncStateAnimationFog::toBytes)
+                .consumerMainThread(S2CSyncStateAnimationFog::handle)
                 .add();
 
-        simpleChannel.messageBuilder(S2CSyncStatusColorFog.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(S2CSyncStatusColorFog::new)
-                .encoder(S2CSyncStatusColorFog::toBytes)
-                .consumerMainThread(S2CSyncStatusColorFog::handle)
+        simpleChannel.messageBuilder(S2CSyncStateAnimationColorFog.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(S2CSyncStateAnimationColorFog::new)
+                .encoder(S2CSyncStateAnimationColorFog::toBytes)
+                .consumerMainThread(S2CSyncStateAnimationColorFog::handle)
                 .add();
     }
 

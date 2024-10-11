@@ -25,23 +25,23 @@ public interface CustomFogCap {
      * Getter de statusFog
      * @return Le status de l'animation du brouillard
      */
-    CustomFogCapImpl.StatusDirectionCustomFog getStatusFog();
+    CustomFogCapImpl.StateAnimationCustomFog getStateAnimationFog();
 
     /**
      * Getter de statusColor
      * @return Le status de l'animation de la couleur du brouillard
      */
-    CustomFogCapImpl.StatusDirectionCustomFog getStatusColor();
+    CustomFogCapImpl.StateAnimationCustomFog getStateAnimationFogColor();
 
     /**
      * Setter de statusFog
-     * @param statusFog Status du brouillard
+     * @param stateAnimationFog Status du brouillard
      */
-    void setStatusFog(CustomFogCapImpl.StatusDirectionCustomFog statusFog);
+    void setStateAnimationFog(CustomFogCapImpl.StateAnimationCustomFog stateAnimationFog);
 
     /**
      * Setter de statusColor
-     * @param statusColor Status de la couleur du brouillard
+     * @param stateAnimationFogColor Status de la couleur du brouillard
      */
-    void setStatusColor(CustomFogCapImpl.StatusDirectionCustomFog statusColor);
+    void setStateAnimationFogColor(CustomFogCapImpl.StateAnimationCustomFog stateAnimationFogColor);
 }
